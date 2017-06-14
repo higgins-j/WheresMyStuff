@@ -9,7 +9,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import edu.gatech.cs2340.wheresmystuff.R;
+import edu.gatech.cs2340.wheresmystuff.model.Login;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -19,7 +21,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        final EditText usernameField = (EditText) findViewById(R.id.UsernameField);
+        final EditText passwordField = (EditText) findViewById(R.id.PasswordField);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -32,8 +35,13 @@ public class MainActivity extends AppCompatActivity {
         signinbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (Login.check(usernameField.getText().toString(), passwordField.getText().toString())) {
+                    Snackbar.make(view, "Your password is correct", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                }
             }
         });
+
     }
 
     @Override

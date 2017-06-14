@@ -8,48 +8,59 @@
     tools:context="edu.gatech.cs2340.wheresmystuff.controller.MainActivity"
     tools:showIn="@layout/activity_main">
 
-    <EditText
-        android:id="@+id/UsernameField"
-        android:layout_width="212dp"
-        android:layout_height="41dp"
-        android:ems="10"
-        android:inputType="text"
-        tools:layout_editor_absoluteX="19dp"
-        tools:layout_editor_absoluteY="54dp" />
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="0dp"
+        android:layout_height="439dp"
+        android:orientation="vertical"
+        android:weightSum="1"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="8dp">
 
-    <EditText
-        android:id="@+id/PasswordField"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPassword"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="145dp" />
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_marginTop="8dp"
+            android:layout_weight="0.01"
+            android:text="Username" />
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="216dp"
-        android:layout_height="21dp"
-        android:layout_marginBottom="7dp"
-        android:layout_marginTop="8dp"
-        android:text="Username"
-        tools:layout_editor_absoluteX="16dp" />
+        <EditText
+            android:id="@+id/UsernameField"
+            android:layout_width="match_parent"
+            android:layout_height="41dp"
+            android:layout_marginTop="8dp"
+            android:ems="10"
+            android:inputType="text"
+            tools:layout_editor_absoluteX="19dp" />
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="212dp"
-        android:layout_height="20dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Password"
-        tools:layout_editor_absoluteX="19dp" />
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_marginTop="8dp"
+            android:text="Password"
+            tools:layout_editor_absoluteX="16dp" />
+
+        <EditText
+            android:id="@+id/PasswordField"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:ems="10"
+            android:inputType="textPassword"
+            tools:layout_editor_absoluteX="16dp" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/signinbutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="34dp"
+        android:layout_marginBottom="80dp"
+        android:layout_marginLeft="23dp"
+        android:layout_marginStart="8dp"
         android:text="Sign In"
-        tools:layout_editor_absoluteX="215dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/linearLayout" />
 
 </android.support.constraint.ConstraintLayout>
