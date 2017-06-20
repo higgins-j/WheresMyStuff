@@ -16,7 +16,7 @@ public class Login {
      * @param pass password entered by the user in the login screen
      * @return true if credentials are correct, false if they are incorrect
      */
-    public boolean check(String user, String pass) {
+    public static boolean check(String user, String pass) {
         return (user.equals(username) && pass.equals(password));
     }
 }
