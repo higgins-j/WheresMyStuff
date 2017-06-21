@@ -33,7 +33,7 @@ package edu.gatech.cs2340.wheresmystuff.model;
      * @return            [description]
      */
     public boolean banUser(User bannedUser) {
-        return false;
+        return bannedUser.setAccountState(false);
     }
 
     /**
