@@ -12,8 +12,7 @@
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
-    </string>
+    <string name="error_email_password_match">Email and password do not match</string>
+    <string name="error_email_already_registered">This email already belongs to an account</string>
     <string name="title_activity_sign_up">Sign Up</string>
 </resources>

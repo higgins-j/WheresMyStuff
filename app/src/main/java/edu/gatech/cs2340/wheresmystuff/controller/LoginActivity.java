@@ -210,8 +210,8 @@ public class LoginActivity extends AppCompatActivity {
             if (success) {
                 finish();
             } else {
-                mEmailView.setError("Email and password do not match");
-                mPasswordView.setError("Email and password do not match");
+                mEmailView.setError(getString(R.string.error_email_password_match));
+                mPasswordView.setError(getString(R.string.error_email_password_match));
                 mPasswordView.requestFocus();
             }
         }
