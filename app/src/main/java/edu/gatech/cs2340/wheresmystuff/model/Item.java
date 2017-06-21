@@ -18,5 +18,6 @@ public class Item {
     private String category;
     private String type;
     private String description;
+    private int monetaryValue;
 
 }
