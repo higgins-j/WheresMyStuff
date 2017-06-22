@@ -1,5 +1,9 @@
 package edu.gatech.cs2340.wheresmystuff.model;
 
+import java.util.ArrayList;
+
+
+
 /**
  * @author Monira Khan
  * @version 1.0
@@ -16,6 +20,10 @@ public class User {
     private String phoneNum;
     private String address;
     private AccountState accountState;
+    private ArrayList<Item> lostItems = new ArrayList<>();
+    private ArrayList<Item> foundItems = new ArrayList<>();
+    private ArrayList<Item> neededItems = new ArrayList<>();
+
 
     /*
     Constructor
@@ -85,6 +93,49 @@ public class User {
         accountState = newAccountState;
         return accountState;
     }
+
+    public ArrayList<Item> getLostItems() {
+        return lostItems;
+    }
+
+    public ArrayList<Item> getFoundItems() {
+        return foundItems;
+    }
+
+    public ArrayList<Item> getNeededItems() {
+        return neededItems;
+    }
+
+    /**
+     * Adds a lost item that the user lost and is looking for into the array
+     * listof their lost items
+     * @param lostItem [item to add into the list]
+     * @return boolean is it was successful
+     */
+    public boolean addLostItem(Item lostItem) {
+        return lostItems.add(lostItem);
+    }
+
+    /**
+     * Adds a found item that user found and is willing to give away/sell to the
+     * array of their found items
+     * @param foundItem [item to add into the list]
+     * @return returns if it was successful
+     */
+    public boolean addFoundItem(Item foundItem) {
+        return foundItems.add(foundItem);
+    }
+
+    /**
+     * Adds a needed item that the user needs into the aray list of their needed
+     * items
+     * @param  neededItem [item to add into the list]
+     * @return            [returns if it was successful]
+     */
+    public boolean addNeededItem(Item neededItem) {
+        return neededItems.add(neededItem);
+    }
+
 
 
 
