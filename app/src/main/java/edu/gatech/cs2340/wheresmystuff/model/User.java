@@ -15,13 +15,13 @@ public class User {
     private String name;
     private String phoneNum;
     private String address;
-    private boolean accountState = true;
+    private AccountState accountState;
 
     /*
     Constructor
      */
     public User(String user, String pass, String name, String phoneNum,
-        String address, boolean accountState) {
+        String address, AccountState accountState) {
         this.user = user;
         this.pass = pass;
         this.name = name;
@@ -77,11 +77,11 @@ public class User {
 
     }
 
-    public boolean getAccountState() {
+    public AccountState getAccountState() {
         return accountState;
     }
 
-    public boolean setAccountState(boolean newAccountState) {
+    public AccountState setAccountState(AccountState newAccountState) {
         accountState = newAccountState;
         return accountState;
     }
