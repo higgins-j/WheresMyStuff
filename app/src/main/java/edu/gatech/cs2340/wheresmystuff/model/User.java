@@ -74,14 +74,16 @@ public class User {
 
     public void setAddress(String newAddress) {
         address = newAddress;
+
     }
 
     public boolean getAccountState() {
         return accountState;
     }
 
-    public void setAccountState(boolean newAccountState) {
+    public boolean setAccountState(boolean newAccountState) {
         accountState = newAccountState;
+        return accountState;
     }
 
 
