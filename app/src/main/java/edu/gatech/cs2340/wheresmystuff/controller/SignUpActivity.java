@@ -3,6 +3,7 @@ package edu.gatech.cs2340.wheresmystuff.controller;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -211,7 +212,9 @@ public class SignUpActivity extends AppCompatActivity {
             showProgress(false);
 
             if (success) {
+                Intent i = new Intent(getApplicationContext(), App.class);
                 finish();
+                startActivity(i);
             } else {
                 mPasswordView.setError(getString(R.string.error_email_already_registered));
                 mPasswordView.requestFocus();
