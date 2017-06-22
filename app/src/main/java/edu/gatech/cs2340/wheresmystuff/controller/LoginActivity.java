@@ -3,7 +3,6 @@ package edu.gatech.cs2340.wheresmystuff.controller;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -209,12 +208,10 @@ public class LoginActivity extends AppCompatActivity {
             showProgress(false);
 
             if (success) {
-                Intent i = new Intent(getApplicationContext(), App.class);
                 finish();
-                startActivity(i);
             } else {
-                mEmailView.setError(getString(R.string.error_email_password_match));
-                mPasswordView.setError(getString(R.string.error_email_password_match));
+                mEmailView.setError("Email and password do not match");
+                mPasswordView.setError("Email and password do not match");
                 mPasswordView.requestFocus();
             }
         }
