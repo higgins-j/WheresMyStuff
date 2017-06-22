@@ -25,9 +25,6 @@
         <activity
             android:name=".controller.SignUpActivity"
             android:label="@string/title_activity_sign_up" />
-        <activity
-            android:name=".controller.App"
-            android:label="@string/title_activity_app" />
     </application>
 
 </manifest>
