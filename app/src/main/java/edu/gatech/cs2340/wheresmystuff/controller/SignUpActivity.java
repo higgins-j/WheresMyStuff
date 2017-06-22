@@ -17,6 +17,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import edu.gatech.cs2340.wheresmystuff.R;
 
 /**
@@ -24,13 +27,13 @@ import edu.gatech.cs2340.wheresmystuff.R;
  */
 public class SignUpActivity extends AppCompatActivity {
 
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "username@example.com:password"
-    };
+//    /**
+//     * A dummy authentication store containing known user names and passwords.
+//     * TODO: remove after connecting to a real authentication system.
+//     */
+//    private static final String[] DUMMY_CREDENTIALS = new String[]{
+//            "username@example.com:password"
+//    };
 
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
@@ -39,9 +42,12 @@ public class SignUpActivity extends AppCompatActivity {
 
     // UI references.
     private EditText mEmailView;
-    private EditText mPasswordView;
+    private EditText mPasswordViewOne;
+    private EditText mPasswordViewTwo;
     private View mProgressView;
     private View mLoginFormView;
+
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,11 +56,23 @@ public class SignUpActivity extends AppCompatActivity {
         // Set up the login form.
         mEmailView = (EditText) findViewById(R.id.email);
 
-        mPasswordView = (EditText) findViewById(R.id.password);
-        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        mPasswordViewOne = (EditText) findViewById(R.id.password_one);
+        mPasswordViewOne.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == R.id.login || id == EditorInfo.IME_NULL) {
+                if (id == R.id.signup || id == EditorInfo.IME_NULL) {
+                    attemptLogin();
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        mPasswordViewTwo = (EditText) findViewById(R.id.password_two);
+        mPasswordViewTwo.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
+                if (id == R.id.signup || id == EditorInfo.IME_NULL) {
                     attemptLogin();
                     return true;
                 }
@@ -72,7 +90,10 @@ public class SignUpActivity extends AppCompatActivity {
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+        mAuth = FirebaseAuth.getInstance();
     }
+
 
     /**
      * Attempts to sign in or register the account specified by the login form.
@@ -86,23 +107,33 @@ public class SignUpActivity extends AppCompatActivity {
 
         // Reset errors.
         mEmailView.setError(null);
-        mPasswordView.setError(null);
+        mPasswordViewOne.setError(null);
+        mPasswordViewTwo.setError(null);
 
         // Store values at the time of the login attempt.
         String email = mEmailView.getText().toString();
-        String password = mPasswordView.getText().toString();
+        String password = mPasswordViewOne.getText().toString();
+        String passwordTwo = mPasswordViewTwo.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
 
         // Check for a valid password, if the user entered one.
         if (TextUtils.isEmpty(password)) {
-            mPasswordView.setError(getString(R.string.error_field_required));
-            focusView = mPasswordView;
+            mPasswordViewOne.setError(getString(R.string.error_field_required));
+            focusView = mPasswordViewOne;
             cancel = true;
         } else if (!isPasswordValid(password)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
-            focusView = mPasswordView;
+            mPasswordViewOne.setError(getString(R.string.error_invalid_password));
+            focusView = mPasswordViewOne;
+            cancel = true;
+        }
+
+        // Check for matching password
+        if (!password.equals(passwordTwo)) {
+            mPasswordViewOne.setError("Passwords do not match");
+            mPasswordViewTwo.setError("Passwords do not match");
+            focusView = mPasswordViewOne;
             cancel = true;
         }
 
@@ -194,14 +225,6 @@ public class SignUpActivity extends AppCompatActivity {
         protected Boolean doInBackground(Void... params) {
             // TODO: replace with Firebase sign up
 
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
-
             // TODO: register the new account here.
             return true;
         }
@@ -216,8 +239,8 @@ public class SignUpActivity extends AppCompatActivity {
                 finish();
                 startActivity(i);
             } else {
-                mPasswordView.setError(getString(R.string.error_email_already_registered));
-                mPasswordView.requestFocus();
+                mEmailView.setError(getString(R.string.error_email_already_registered));
+                mEmailView.requestFocus();
             }
         }
 
