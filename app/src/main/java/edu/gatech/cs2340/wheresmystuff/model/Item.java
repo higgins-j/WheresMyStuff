@@ -15,7 +15,7 @@ import java.util.Arrays;
 
 public class Item {
     public static List<String> legalCategories = Arrays.asList("CLOTHING",
-        "JEWELARY", "TECH", "TOY", "HOUSEHOLD_APPLIANCE", "PHOTO");
+        "JEWELRY", "TECH", "TOY", "HOUSEHOLD_APPLIANCE", "PHOTO");
     public static List<String> legalStatuses = Arrays.asList("FOUND", "LOST",
         "NEEDED");
 

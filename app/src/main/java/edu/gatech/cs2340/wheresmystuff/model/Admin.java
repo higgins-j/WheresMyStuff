@@ -32,8 +32,8 @@ package edu.gatech.cs2340.wheresmystuff.model;
      * @param  bannedUser [description]
      * @return            [description]
      */
-    public boolean banUser(User bannedUser) {
-        return bannedUser.setAccountState(AccountState.BANNED);
+    public void banUser(User bannedUser) {
+        bannedUser.setAccountState(AccountState.BANNED);
     }
 
     /**

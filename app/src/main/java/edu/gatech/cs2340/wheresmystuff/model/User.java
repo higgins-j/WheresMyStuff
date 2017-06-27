@@ -40,7 +40,7 @@ public class User {
     }
 
     public User(String user, String pass) {
-        this(user, pass, null, null, null, true);
+        this(user, pass, null, null, null, AccountState.ACTIVE);
 
     }
 
