@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import edu.gatech.cs2340.wheresmystuff.R;
+import edu.gatech.cs2340.wheresmystuff.model.FakeFirebase;
 import edu.gatech.cs2340.wheresmystuff.model.Login;
 import android.content.Intent;
 import android.os.Bundle;
@@ -41,11 +42,8 @@ public class App extends AppCompatActivity {
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FirebaseAuth.getInstance().signOut();
-
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                FakeFirebase.getInstance().signOut();
                 finish();
-                startActivity(intent);
             }
         });
     }

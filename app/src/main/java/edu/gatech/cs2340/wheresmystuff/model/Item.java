@@ -15,13 +15,13 @@ import java.util.Arrays;
 
 public class Item {
     public static List<String> legalCategories = Arrays.asList("CLOTHING",
-        "JEWELARY", "TECH", "TOY", "HOUSEHOLD_APPLIANCE", "PHOTO");
-    public static List<String> legalTypes = Arrays.asList("FOUND", "LOST",
+        "JEWELRY", "TECH", "TOY", "HOUSEHOLD_APPLIANCE", "PHOTO");
+    public static List<String> legalStatuses = Arrays.asList("FOUND", "LOST",
         "NEEDED");
 
     private User owner;
     private String category;
-    private String type;
+    private String status;
     private String description;
     private int monetaryValue;
 

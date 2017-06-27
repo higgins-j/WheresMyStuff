@@ -15,8 +15,10 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -26,6 +28,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import edu.gatech.cs2340.wheresmystuff.R;
+import edu.gatech.cs2340.wheresmystuff.model.AccountType;
+import edu.gatech.cs2340.wheresmystuff.model.FakeFirebase;
 
 /**
  * A login screen that offers login via email/password.
@@ -49,6 +53,7 @@ public class SignUpActivity extends AppCompatActivity {
     private EditText mEmailView;
     private EditText mPasswordViewOne;
     private EditText mPasswordViewTwo;
+    private Spinner mSpinner;
     private View mProgressView;
     private View mLoginFormView;
 
@@ -78,6 +83,7 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == R.id.signup || id == EditorInfo.IME_NULL) {
+
                     attemptLogin();
                     return true;
                 }
@@ -92,6 +98,14 @@ public class SignUpActivity extends AppCompatActivity {
                 attemptLogin();
             }
         });
+
+        mSpinner = (Spinner) findViewById(R.id.spinnerUserType);
+
+
+        ArrayAdapter<AccountType> accountTypeArrayAdapter = new ArrayAdapter<>(
+                this, android.R.layout.simple_spinner_item, AccountType.values());
+        accountTypeArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mSpinner.setAdapter(accountTypeArrayAdapter);
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
@@ -161,26 +175,19 @@ public class SignUpActivity extends AppCompatActivity {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
+
+            if ((mSpinner.getSelectedItem().equals(AccountType.ADMIN)
+                    && FakeFirebase.getInstance().registerAdmin(email, password))
+                    || FakeFirebase.getInstance().register(email, password)) {
+                Intent i = new Intent(getApplicationContext(), App.class);
+                finish();
+                startActivity(i);
+            } else {
+                mEmailView.setError(getString(R.string.error_email_already_registered));
+                mEmailView.requestFocus();
+            }
 //            mAuthTask = new UserLoginTask(email, password);
 //            mAuthTask.execute((Void) null);
-            mAuth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                // account created
-                                Intent i = new Intent(getApplicationContext(), App.class);
-                                finish();
-                                startActivity(i);
-                            } else {
-                                // TODO: are there other errors that can happen here?
-                                Log.w("SignIn", "createUserWithEmail:failure", task.getException());
-                                showProgress(false);
-                                mEmailView.setError(getString(R.string.error_email_already_registered));
-                                mEmailView.requestFocus();
-                            }
-                        }
-                    });
         }
     }
 

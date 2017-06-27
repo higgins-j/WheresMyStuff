@@ -11,7 +11,7 @@ package edu.gatech.cs2340.wheresmystuff.model;
 
  public class Admin extends User {
     public Admin(String user, String pass, String name, String phoneNum,
-        String address, boolean accountState) {
+        String address, AccountState accountState) {
         super(user, pass, name, phoneNum, address, accountState);
     }
 
@@ -32,8 +32,8 @@ package edu.gatech.cs2340.wheresmystuff.model;
      * @param  bannedUser [description]
      * @return            [description]
      */
-    public boolean banUser(User bannedUser) {
-        return bannedUser.setAccountState(false);
+    public void banUser(User bannedUser) {
+        bannedUser.setAccountState(AccountState.BANNED);
     }
 
     /**
@@ -49,7 +49,7 @@ package edu.gatech.cs2340.wheresmystuff.model;
      * @param unLocked [description]
      */
     public void unLockAccount(User unLocked) {
-        unLocked.setAccountState(true);
+        unLocked.setAccountState(AccountState.ACTIVE);
     }
 
  }
