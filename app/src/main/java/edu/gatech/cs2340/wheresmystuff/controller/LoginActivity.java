@@ -18,19 +18,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import edu.gatech.cs2340.wheresmystuff.R;
+import edu.gatech.cs2340.wheresmystuff.model.FakeFirebase;
 
 /**
  * A login screen that offers login via email/password.
  */
 public class LoginActivity extends AppCompatActivity {
 
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "username@example.com:password"
-    };
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -192,15 +186,7 @@ public class LoginActivity extends AppCompatActivity {
         protected Boolean doInBackground(Void... params) {
             // TODO: add Firebase authentication here
 
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
-
-            return false;
+            return FakeFirebase.getInstance().login(mEmail, mPassword);
         }
 
         @Override
