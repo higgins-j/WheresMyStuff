@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -25,29 +24,14 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import edu.gatech.cs2340.wheresmystuff.R;
 import edu.gatech.cs2340.wheresmystuff.model.AccountType;
-import edu.gatech.cs2340.wheresmystuff.model.FakeFirebase;
 
 /**
  * A login screen that offers login via email/password.
  */
 public class SignUpActivity extends AppCompatActivity {
-
-//    /**
-//     * A dummy authentication store containing known user names and passwords.
-//     * TODO: remove after connecting to a real authentication system.
-//     */
-//    private static final String[] DUMMY_CREDENTIALS = new String[]{
-//            "username@example.com:password"
-//    };
-
-    /**
-     * Keep track of the login task to ensure we can cancel it if requested.
-     */
-    private UserLoginTask mAuthTask = null;
 
     // UI references.
     private EditText mEmailView;
@@ -71,7 +55,7 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == R.id.signup || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
+                    attemptSignUp();
                     return true;
                 }
                 return false;
@@ -83,8 +67,7 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == R.id.signup || id == EditorInfo.IME_NULL) {
-
-                    attemptLogin();
+                    attemptSignUp();
                     return true;
                 }
                 return false;
@@ -95,7 +78,7 @@ public class SignUpActivity extends AppCompatActivity {
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptLogin();
+                attemptSignUp();
             }
         });
 
@@ -113,17 +96,13 @@ public class SignUpActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
     }
 
-
     /**
-     * Attempts to sign in or register the account specified by the login form.
-     * If there are form errors (invalid email, missing fields, etc.), the
-     * errors are presented and no actual login attempt is made.
+     * Attempt to sign up for a new account
+     *
+     * If there are errors (invalid email, passwords don't match, email already registered)
+     * then the progress view is hidden and the form is shown again
      */
-    private void attemptLogin() {
-        if (mAuthTask != null) {
-            return;
-        }
-
+    private void attemptSignUp() {
         // Reset errors.
         mEmailView.setError(null);
         mPasswordViewOne.setError(null);
@@ -176,18 +155,27 @@ public class SignUpActivity extends AppCompatActivity {
             // perform the user login attempt.
             showProgress(true);
 
-            if ((mSpinner.getSelectedItem().equals(AccountType.ADMIN)
-                    && FakeFirebase.getInstance().registerAdmin(email, password))
-                    || FakeFirebase.getInstance().register(email, password)) {
-                Intent i = new Intent(getApplicationContext(), App.class);
-                finish();
-                startActivity(i);
-            } else {
-                mEmailView.setError(getString(R.string.error_email_already_registered));
-                mEmailView.requestFocus();
-            }
-//            mAuthTask = new UserLoginTask(email, password);
-//            mAuthTask.execute((Void) null);
+            mAuth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                Log.d("FirebaseSignUp", "createUserWithEmail:Success");
+
+                                // TODO: if successful, check if User should be an admin and add
+                                //       them to list of admins in Firebase database
+
+                                Intent i = new Intent(getApplicationContext(), App.class);
+                                finish();
+                                startActivity(i);
+                            } else {
+                                // Probably means the email was taken
+                                mEmailView.setError(getString(R.string.error_email_already_registered));
+                                mEmailView.requestFocus();
+                                showProgress(false);
+                            }
+                        }
+                    });
         }
     }
 
@@ -234,50 +222,6 @@ public class SignUpActivity extends AppCompatActivity {
             // and hide the relevant UI components.
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-        }
-    }
-
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final String mEmail;
-        private final String mPassword;
-
-        UserLoginTask(String email, String password) {
-            mEmail = email;
-            mPassword = password;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO: replace with Firebase sign up
-
-            // TODO: register the new account here.
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(false);
-
-            if (success) {
-                Intent i = new Intent(getApplicationContext(), App.class);
-                finish();
-                startActivity(i);
-            } else {
-                mEmailView.setError(getString(R.string.error_email_already_registered));
-                mEmailView.requestFocus();
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
         }
     }
 }
