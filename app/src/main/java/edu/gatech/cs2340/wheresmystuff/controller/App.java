@@ -42,7 +42,7 @@ public class App extends AppCompatActivity {
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FakeFirebase.getInstance().signOut();
+                FirebaseAuth.getInstance().signOut();
                 finish();
             }
         });
