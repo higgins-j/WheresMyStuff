@@ -1,21 +1,11 @@
 package edu.gatech.cs2340.wheresmystuff.controller;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import edu.gatech.cs2340.wheresmystuff.R;
-import edu.gatech.cs2340.wheresmystuff.model.FakeFirebase;
-import edu.gatech.cs2340.wheresmystuff.model.Login;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -34,8 +24,9 @@ public class App extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
             }
         });
         Button logoutButton = (Button) findViewById(R.id.logoutButton);
