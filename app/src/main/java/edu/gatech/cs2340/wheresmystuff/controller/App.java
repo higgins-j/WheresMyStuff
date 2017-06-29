@@ -22,6 +22,9 @@ import java.util.ArrayList;
 
 import edu.gatech.cs2340.wheresmystuff.R;
 
+/**
+ * The main screen of the app that the user is taken to after logging in
+ */
 public class App extends AppCompatActivity {
 
     DatabaseReference mItems;

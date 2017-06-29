@@ -8,7 +8,6 @@ package edu.gatech.cs2340.wheresmystuff.model;
  /**
   * This class represents an Admin
   */
-
  public class Admin extends User {
     public Admin(String user, String pass, String name, String phoneNum,
         String address, AccountState accountState) {
@@ -29,16 +28,15 @@ package edu.gatech.cs2340.wheresmystuff.model;
 
     /**
      * Bans user
-     * @param  bannedUser [description]
-     * @return            [description]
+     * @param  bannedUser the user being banned
      */
     public void banUser(User bannedUser) {
         bannedUser.setAccountState(AccountState.BANNED);
     }
 
     /**
-     * Makes user into an Admin
-     * @param toBeAdmin [description]
+     * Promotes a user into an Admin
+     * @param toBeAdmin the user to promote
      */
     public void userToAdmin(User toBeAdmin) {
 
@@ -46,7 +44,7 @@ package edu.gatech.cs2340.wheresmystuff.model;
 
     /**
      * Unlocks a user's account
-     * @param unLocked [description]
+     * @param unLocked the user account being unlocked
      */
     public void unLockAccount(User unLocked) {
         unLocked.setAccountState(AccountState.ACTIVE);

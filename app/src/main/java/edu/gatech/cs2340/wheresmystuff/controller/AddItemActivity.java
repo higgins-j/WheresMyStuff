@@ -16,6 +16,9 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import edu.gatech.cs2340.wheresmystuff.R;
 
+/**
+ * A dialog to create a new item listing
+ */
 public class AddItemActivity extends AppCompatActivity {
 
     private EditText mTitle;

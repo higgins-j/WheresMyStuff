@@ -31,7 +31,7 @@ import edu.gatech.cs2340.wheresmystuff.R;
 import edu.gatech.cs2340.wheresmystuff.model.AccountType;
 
 /**
- * A login screen that offers login via email/password.
+ * A registration screen that offers sign up via email/password.
  */
 public class SignUpActivity extends AppCompatActivity {
 
@@ -188,11 +188,23 @@ public class SignUpActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * A small check to ensure that an email passed in is valid
+     *
+     * @param email the string that is being checked
+     * @return whether the email is valid
+     */
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
         return email.contains("@");
     }
 
+    /**
+     * A small check to ensure the password meets requirements
+     *
+     * @param password the string that is being checked
+     * @return whether the password is valid
+     */
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
         return password.length() > 7;
