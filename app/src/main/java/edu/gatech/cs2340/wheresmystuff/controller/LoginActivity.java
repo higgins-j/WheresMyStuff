@@ -139,6 +139,11 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Checks if the email is valid
+     * @param email the email to check
+     * @return if the email is valid or not
+     */
     private boolean isEmailValid(String email) {
         //TODO: Add more thorough email verification technique
         return email.contains("@");
