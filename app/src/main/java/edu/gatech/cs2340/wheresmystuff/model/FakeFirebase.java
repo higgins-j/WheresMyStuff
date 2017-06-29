@@ -12,12 +12,13 @@ public class FakeFirebase {
     public static FakeFirebase getInstance() {
         return ourInstance;
     }
+    private FakeFirebase() {}
 
+    /*
+     * Registration and Sign In
+     */
     private User user;
     private HashMap<String, User> userList = new HashMap<>();
-
-    private FakeFirebase() {
-    }
 
     public boolean register(String email, String password) {
         if (userList.containsKey(email)) {
@@ -53,4 +54,25 @@ public class FakeFirebase {
     public void signOut() {
         user = null;
     }
+
+    /*
+      * Basic Database layout?:
+      * {
+      *     Admins {
+      *         (UUID: User object?)
+      *         .
+      *         .
+      *         .
+      *     },
+      *     Users {
+      *         (UUID: User object?) - emails and passwords not exposed
+      *         .
+      *         .
+      *         .
+      *     },
+      *     Items {
+      *
+      *     }
+      */
+
 }

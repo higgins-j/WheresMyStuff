@@ -1,5 +1,6 @@
 package edu.gatech.cs2340.wheresmystuff.controller;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -24,7 +25,8 @@ public class App extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(getApplicationContext(), AddItemActivity.class);
+                startActivity(intent);
 //                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                        .setAction("Action", null).show();
             }
@@ -39,4 +41,11 @@ public class App extends AppCompatActivity {
         });
     }
 
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//
+//        // Use this to restore anything we add to the action bar after fragment closes
+//        this.getSupportActionBar().setTitle("Where's My Stuff?");
+//    }
 }

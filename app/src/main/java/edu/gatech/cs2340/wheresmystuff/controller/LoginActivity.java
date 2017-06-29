@@ -123,7 +123,7 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                Log.d("FirebaseSignUp", "createUserWithEmail:Success");
+                                Log.d("FirebaseSignUp", "signInWithEmail:Success");
 
                                 Intent i = new Intent(getApplicationContext(), App.class);
                                 finish();

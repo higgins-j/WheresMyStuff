@@ -28,7 +28,8 @@
         <activity
             android:name=".controller.App"
             android:label="@string/title_activity_app" />
-        <activity android:name=".controller.AddItemActivity"></activity>
+        <activity android:name=".controller.AddItemActivity"
+            android:label="@string/title_activity_add_item"/>
     </application>
 
 </manifest>
