@@ -24,6 +24,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import edu.gatech.cs2340.wheresmystuff.R;
 import edu.gatech.cs2340.wheresmystuff.model.AccountType;
@@ -41,6 +43,7 @@ public class SignUpActivity extends AppCompatActivity {
     private View mProgressView;
     private View mLoginFormView;
 
+    private DatabaseReference mDatabase;
     private FirebaseAuth mAuth;
 
     @Override
@@ -93,6 +96,7 @@ public class SignUpActivity extends AppCompatActivity {
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
 
+        mDatabase = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
     }
 
@@ -109,9 +113,9 @@ public class SignUpActivity extends AppCompatActivity {
         mPasswordViewTwo.setError(null);
 
         // Store values at the time of the login attempt.
-        String email = mEmailView.getText().toString();
-        String password = mPasswordViewOne.getText().toString();
-        String passwordTwo = mPasswordViewTwo.getText().toString();
+        final String email = mEmailView.getText().toString();
+        final String password = mPasswordViewOne.getText().toString();
+        final String passwordTwo = mPasswordViewTwo.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
@@ -161,9 +165,14 @@ public class SignUpActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 Log.d("FirebaseSignUp", "createUserWithEmail:Success");
+                                String uid = mAuth.getCurrentUser().getUid();
 
                                 // TODO: if successful, check if User should be an admin and add
                                 //       them to list of admins in Firebase database
+                                if (mSpinner.getSelectedItem().equals(AccountType.ADMIN)) {
+                                    mDatabase.child("admins").child(uid)
+                                            .setValue(email.split("@")[0]);
+                                }
 
                                 Intent i = new Intent(getApplicationContext(), App.class);
                                 finish();
