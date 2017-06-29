@@ -1,4 +1,7 @@
 {
+  "admins" : {
+    "testadmin" : "testadmin"
+  },
   "items" : {
     "testitem" : "testitem"
   }
