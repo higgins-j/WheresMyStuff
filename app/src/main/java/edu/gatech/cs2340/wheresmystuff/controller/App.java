@@ -86,6 +86,8 @@ public class App extends AppCompatActivity {
             FirebaseAuth.getInstance().signOut();
             finish();
             return true;
+        } else if (id == R.id.action_search) {
+            // TODO show search dialog/something
         }
 
         return super.onOptionsItemSelected(item);
