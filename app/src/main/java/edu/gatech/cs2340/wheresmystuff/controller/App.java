@@ -101,6 +101,7 @@ public class App extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 lostItemList.clear();
                 foundItemList.clear();
+                neededItemList.clear();
                 for (DataSnapshot item : dataSnapshot.getChildren()) {
                     switch (item.getValue(Item.class).getStatusVal()) {
                         case LOST:
