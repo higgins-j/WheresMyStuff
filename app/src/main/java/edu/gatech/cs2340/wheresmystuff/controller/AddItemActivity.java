@@ -11,10 +11,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import edu.gatech.cs2340.wheresmystuff.R;
+import edu.gatech.cs2340.wheresmystuff.model.Item;
 
 /**
  * A dialog to create a new item listing
@@ -96,7 +98,13 @@ public class AddItemActivity extends AppCompatActivity {
             focusView.requestFocus();
             return false;
         } else {
-            mDatabase.child("items").child(title).setValue(title);
+            Item item = new Item(title, Item.Category.TOY, Item.Status.LOST, FirebaseAuth.getInstance().getCurrentUser().getUid(), 0);
+
+            String key = mDatabase.child("items").push().getKey();
+
+            mDatabase.child("items").child(key).setValue(item);
+            //TODO: add item key to User's item list
+
             Log.d("AddItem", "mDatabase:setValue");
             return true;
         }
