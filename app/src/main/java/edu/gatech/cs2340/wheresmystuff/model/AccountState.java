@@ -9,5 +9,5 @@ package edu.gatech.cs2340.wheresmystuff.model;
  * Represents the account state of a user's account
  */
 public enum AccountState {
-    ACTIVE, INACTIVE, BANNED, DELETED;
+    ACTIVE, INACTIVE, BANNED, DELETED
 }

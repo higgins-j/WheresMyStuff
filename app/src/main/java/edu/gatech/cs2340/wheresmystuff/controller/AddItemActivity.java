@@ -88,7 +88,7 @@ public class AddItemActivity extends AppCompatActivity {
      * If required fields in the form are empty, the errors are
      * presented and no actual data is added to the database
      *
-     * @return
+     * @return if the Item was created successfully
      */
     private boolean tryCreateItem() {
         // Reset errors.
