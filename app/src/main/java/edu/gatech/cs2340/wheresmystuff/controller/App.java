@@ -10,8 +10,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Spinner;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -20,6 +22,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -33,10 +36,15 @@ import edu.gatech.cs2340.wheresmystuff.model.Item;
 public class App extends AppCompatActivity {
 
     private DatabaseReference mItems;
+    private Spinner mSpinner;
     private ListView listView;
     private ArrayAdapter<String> arrayAdapter;
 
-    private final ArrayList<String> itemList = new ArrayList<>();
+    private final ArrayList<String> lostItemList = new ArrayList<>();
+    private final ArrayList<String> foundItemList = new ArrayList<>();
+    private final ArrayList<String> neededItemList = new ArrayList<>();
+
+    private ArrayList<String> selectedItemList = new ArrayList<>();
     private ArrayList<String> visibleItemList = new ArrayList<>();
 
     private boolean searching = false;
@@ -48,6 +56,27 @@ public class App extends AppCompatActivity {
         setContentView(R.layout.activity_app);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+
+        mSpinner = new Spinner(getApplicationContext());
+        mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                resetListViewToFilter();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        ArrayAdapter<Item.Status> filterTypeArrayAdapter = new ArrayAdapter<>(
+                this, R.layout.spinner_app_filter, Item.Status.values());
+        filterTypeArrayAdapter.setDropDownViewResource(R.layout.spinner_dropdown);
+        mSpinner.setAdapter(filterTypeArrayAdapter);
+        mSpinner.setSelection(1);
+        toolbar.addView(mSpinner);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_add_item);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -59,7 +88,7 @@ public class App extends AppCompatActivity {
         });
 
         listView = (ListView) findViewById(R.id.list_items);
-        arrayAdapter = new ArrayAdapter<String>(
+        arrayAdapter = new ArrayAdapter<>(
                 getApplicationContext(),
                 android.R.layout.simple_list_item_1,
                 visibleItemList);
@@ -70,14 +99,23 @@ public class App extends AppCompatActivity {
         mItems.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                itemList.clear();
+                lostItemList.clear();
+                foundItemList.clear();
                 for (DataSnapshot item : dataSnapshot.getChildren()) {
-                    itemList.add(item.getValue(Item.class).getTitle());
+                    switch (item.getValue(Item.class).getStatusVal()) {
+                        case LOST:
+                            lostItemList.add(item.getValue(Item.class).getTitle());
+                            break;
+                        case FOUND:
+                            foundItemList.add(item.getValue(Item.class).getTitle());
+                            break;
+                        case NEEDED:
+                            neededItemList.add(item.getValue(Item.class).getTitle());
+                            break;
+                    }
                 }
-                if (!searching){
-                    visibleItemList.clear();
-                    visibleItemList.addAll(itemList);
-                    arrayAdapter.notifyDataSetChanged();
+                if (!searching) {
+                    resetListViewToFilter();
                 }
             }
 
@@ -86,6 +124,23 @@ public class App extends AppCompatActivity {
 
             }
         });
+    }
+
+
+    private void resetListViewToFilter() {
+        visibleItemList.clear();
+        switch ((Item.Status) mSpinner.getSelectedItem()) {
+            case LOST:
+                visibleItemList.addAll(lostItemList);
+                break;
+            case FOUND:
+                visibleItemList.addAll(foundItemList);
+                break;
+            case NEEDED:
+                visibleItemList.addAll(neededItemList);
+                break;
+        }
+        arrayAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -107,9 +162,7 @@ public class App extends AppCompatActivity {
             public boolean onMenuItemActionCollapse(MenuItem item) {
                 searching = false;
 
-                visibleItemList.clear();
-                visibleItemList.addAll(itemList);
-                arrayAdapter.notifyDataSetChanged();
+                resetListViewToFilter();
 
                 return true;
             }
@@ -124,14 +177,13 @@ public class App extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
                 if (lastText.length() > newText.length()) {
-                    visibleItemList.clear();
-                    visibleItemList.addAll(itemList);
+                    resetListViewToFilter();
                 }
 
-                for (Iterator<String> iterator = visibleItemList.iterator(); iterator.hasNext();) {
+                for (Iterator<String> iterator = visibleItemList.iterator(); iterator.hasNext(); ) {
                     String currentString = iterator.next();
                     boolean contains = false;
-                    for (String split: currentString.split(" ")) {
+                    for (String split : currentString.split(" ")) {
                         if (split.contains(newText)) {
                             contains = true;
                         }

@@ -9,7 +9,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -24,6 +26,7 @@ import edu.gatech.cs2340.wheresmystuff.model.Item;
 public class AddItemActivity extends AppCompatActivity {
 
     private EditText mTitle;
+    private Spinner mSpinner;
     private DatabaseReference mDatabase;
 
     @Override
@@ -44,6 +47,15 @@ public class AddItemActivity extends AppCompatActivity {
             actionBar.setHomeButtonEnabled(true);
             actionBar.setHomeAsUpIndicator(R.drawable.ic_clear_white_24dp);
         }
+
+        mSpinner = (Spinner) findViewById(R.id.spinnerItemType);
+
+
+        ArrayAdapter<Item.Status> accountTypeArrayAdapter = new ArrayAdapter<>(
+                this, android.R.layout.simple_spinner_dropdown_item, Item.Status.values());
+        accountTypeArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mSpinner.setAdapter(accountTypeArrayAdapter);
+        mSpinner.setSelection(1);
     }
 
     @Override
@@ -98,7 +110,9 @@ public class AddItemActivity extends AppCompatActivity {
             focusView.requestFocus();
             return false;
         } else {
-            Item item = new Item(title, Item.Category.TOY, Item.Status.LOST, FirebaseAuth.getInstance().getCurrentUser().getUid(), 0);
+            Item.Status itemStatus = (Item.Status) mSpinner.getSelectedItem();
+
+            Item item = new Item(title, Item.Category.TOY, itemStatus, FirebaseAuth.getInstance().getCurrentUser().getUid(), 0);
 
             String key = mDatabase.child("items").push().getKey();
 
