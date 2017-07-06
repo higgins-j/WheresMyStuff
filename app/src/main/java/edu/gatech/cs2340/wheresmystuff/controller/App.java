@@ -126,7 +126,9 @@ public class App extends AppCompatActivity {
         });
     }
 
-
+    /**
+     * Method used to reset the visible item list to the current filter
+     */
     private void resetListViewToFilter() {
         visibleItemList.clear();
         switch ((Item.Status) mSpinner.getSelectedItem()) {

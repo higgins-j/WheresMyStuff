@@ -14,6 +14,9 @@ public class Item {
     private String title;
     private int monetaryValue;
 
+    /**
+     * Default constructor necessary for Firebase serialization
+     */
     public Item() {}
 
     public Item(String title, Category category, Status status, String userID, int monetaryValue) {
@@ -24,7 +27,10 @@ public class Item {
         this.monetaryValue = monetaryValue;
     }
 
-    @Exclude
+    /**
+     * Added method for getting the Category as an enum since Firebase used the default get()
+     * @return category as a Category
+     */    @Exclude
     public Category getCategoryVal() {
         return category;
     }
@@ -45,6 +51,10 @@ public class Item {
         }
     }
 
+    /**
+     * Added method for getting the Status as an enum since Firebase used the default get()
+     * @return status as a Status
+     */
     @Exclude
     public Status getStatusVal() {
         return status;
