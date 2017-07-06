@@ -21,9 +21,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 import edu.gatech.cs2340.wheresmystuff.R;
+import edu.gatech.cs2340.wheresmystuff.model.Item;
 
 /**
  * The main screen of the app that the user is taken to after logging in
@@ -70,7 +72,7 @@ public class App extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 itemList.clear();
                 for (DataSnapshot item : dataSnapshot.getChildren()) {
-                    itemList.add((String) item.getValue());
+                    itemList.add(item.getValue(Item.class).getTitle());
                 }
                 if (!searching){
                     visibleItemList.clear();
