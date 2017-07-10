@@ -22,6 +22,16 @@ public class Item {
      */
     public Item() {}
 
+    public Item(String title, Category category, Status status, String userID,
+                int monetaryValue) {
+        this.title = title;
+        this.category = category;
+        this.status = status;
+        this.userID = userID;
+        this.monetaryValue = monetaryValue;
+        //TODO: this.dateAdded = idk how to set current date without using LocalDate class which is only java 8
+    }
+
     public Item(String title, String description, Category category, Status status, String userID,
                 int monetaryValue) {
         this.title = title;
