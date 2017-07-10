@@ -2,9 +2,7 @@ package edu.gatech.cs2340.wheresmystuff.model;
 
 import com.google.firebase.database.Exclude;
 
-import java.util.Calendar;
 import java.util.Date;
-import java.util.Calendar;
 /**
  * Represents an Item
  */
