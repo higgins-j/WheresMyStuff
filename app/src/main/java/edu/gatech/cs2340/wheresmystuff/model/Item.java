@@ -2,6 +2,9 @@ package edu.gatech.cs2340.wheresmystuff.model;
 
 import com.google.firebase.database.Exclude;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Calendar;
 /**
  * Represents an Item
  */
@@ -12,19 +15,24 @@ public class Item {
     private Status status;
     private String userID;
     private String title;
+    private String description;
     private int monetaryValue;
+    private Date dateAdded;
 
     /**
      * Default constructor necessary for Firebase serialization
      */
     public Item() {}
 
-    public Item(String title, Category category, Status status, String userID, int monetaryValue) {
+    public Item(String title, String description, Category category, Status status, String userID,
+                int monetaryValue) {
         this.title = title;
+        this.description = description;
         this.category = category;
         this.status = status;
         this.userID = userID;
         this.monetaryValue = monetaryValue;
+        //this.dateAdded = idk how to set current date without using LocalDate class which is only java 8
     }
 
     /**
