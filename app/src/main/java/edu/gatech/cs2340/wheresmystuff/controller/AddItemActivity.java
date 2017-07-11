@@ -112,7 +112,7 @@ public class AddItemActivity extends AppCompatActivity {
         } else {
             Item.Status itemStatus = (Item.Status) mSpinner.getSelectedItem();
 
-            Item item = new Item(title, Item.Category.TOY, itemStatus, FirebaseAuth.getInstance().getCurrentUser().getUid(), 0);
+            Item item = new Item(title, "",Item.Category.TOY, itemStatus, FirebaseAuth.getInstance().getCurrentUser().getUid(), 0);
 
             String key = mDatabase.child("items").push().getKey();
 

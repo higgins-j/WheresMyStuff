@@ -5,8 +5,8 @@ import java.util.ArrayList;
 
 
 /**
- * @author Monira Khan
- * @version 1.0
+ * @author Monira Khan & John Abrams
+ * @version 1.2
  */
 
 /*
@@ -23,6 +23,8 @@ public class User {
     private ArrayList<Item> lostItems = new ArrayList<>();
     private ArrayList<Item> foundItems = new ArrayList<>();
     private ArrayList<Item> neededItems = new ArrayList<>();
+    private double balance;
+    private ArrayList<CreditCard> cards;
 
 
     /*
@@ -36,6 +38,7 @@ public class User {
         this.phoneNum = phoneNum;
         this.address = address;
         this.accountState = accountState;
+        this.balance = 0;
 
     }
 
@@ -85,6 +88,10 @@ public class User {
 
     }
 
+    public void setBalance(double newBalance) {
+        balance = newBalance;
+    }
+
     public AccountState getAccountState() {
         return accountState;
     }
@@ -105,6 +112,10 @@ public class User {
     public ArrayList<Item> getNeededItems() {
         return neededItems;
     }
+
+    public double getBalance() { return balance; }
+
+    public ArrayList<CreditCard> getCards() { return cards; }
 
     /**
      * Adds a lost item that the user lost and is looking for into the array
@@ -136,9 +147,37 @@ public class User {
         return neededItems.add(neededItem);
     }
 
+    /**
+     * Adds a credit card to the user's account
+     * @param card the credit card being added
+     * @return true if it was successful and false otherwise
+     */
+    public boolean addCard(CreditCard card) {
+        return cards.add(card);
+    }
 
+    /**
+     * Adds a monetary amount to user's balance
+     * @param amount the monetary amount being added
+     */
+    public void addToBal(double amount) {
+        balance = balance + amount;
+    }
 
+    /**
+     * Subtracts a monetary amount from user's balance
+     * @param amount the monetary amount being subtracted
+     */
+    public void subtractFromBal(double amount) {
+        balance = balance - amount;
+    }
 
-
-
+    /**
+     * Reports a user for bad behavior
+     * @param user the user being reported
+     * @return the user being reported
+     */
+    public User reportUser(User user) {
+        return user;
+    }
 }
