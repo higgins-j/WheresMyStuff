@@ -22,16 +22,6 @@ public class Item {
      */
     public Item() {}
 
-    public Item(String title, Category category, Status status, String userID,
-                int monetaryValue) {
-        this.title = title;
-        this.category = category;
-        this.status = status;
-        this.userID = userID;
-        this.monetaryValue = monetaryValue;
-        //TODO: this.dateAdded = idk how to set current date without using LocalDate class which is only java 8
-    }
-
     public Item(String title, String description, Category category, Status status, String userID,
                 int monetaryValue) {
         this.title = title;
@@ -40,13 +30,14 @@ public class Item {
         this.status = status;
         this.userID = userID;
         this.monetaryValue = monetaryValue;
-        //TODO: this.dateAdded = idk how to set current date without using LocalDate class which is only java 8
+        this.dateAdded = new Date();
     }
 
     /**
      * Added method for getting the Category as an enum since Firebase used the default get()
      * @return category as a Category
-     */    @Exclude
+     */
+    @Exclude
     public Category getCategoryVal() {
         return category;
     }
@@ -92,6 +83,31 @@ public class Item {
         }
     }
 
+    /**
+     * Added method for getting the Date an item was created since Firebase needs a String
+     * @return dateAdded as a Date
+     */
+    @Exclude
+    public Date getDateAddedVal() {
+        return dateAdded;
+    }
+
+    public Long getDateAdded() {
+        if (dateAdded == null) {
+            return null;
+        } else {
+            return dateAdded.getTime();
+        }
+    }
+
+    public void setDateAdded(Long dateAdded) {
+        if (dateAdded == null) {
+            this.dateAdded = null;
+        } else {
+            this.dateAdded = new Date(dateAdded);
+        }
+    }
+
     public String getUserID() {
         return userID;
     }
@@ -114,6 +130,14 @@ public class Item {
 
     public void setMonetaryValue(int monetaryValue) {
         this.monetaryValue = monetaryValue;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public enum Category {
