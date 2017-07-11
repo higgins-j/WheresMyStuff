@@ -217,6 +217,9 @@ public class App extends AppCompatActivity {
             FirebaseAuth.getInstance().signOut();
             finish();
             return true;
+        } else if (id == R.id.action_map_view) {
+            Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
