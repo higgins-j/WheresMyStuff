@@ -1,8 +1,12 @@
 package edu.gatech.cs2340.wheresmystuff.model;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.Exclude;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
 /**
  * Represents an Item
  */
@@ -16,6 +20,7 @@ public class Item {
     private String description;
     private int monetaryValue;
     private Date dateAdded;
+    private LatLng latLng;
 
     /**
      * Default constructor necessary for Firebase serialization
@@ -23,7 +28,7 @@ public class Item {
     public Item() {}
 
     public Item(String title, String description, Category category, Status status, String userID,
-                int monetaryValue) {
+                int monetaryValue, LatLng latLng) {
         this.title = title;
         this.description = description;
         this.category = category;
@@ -31,7 +36,37 @@ public class Item {
         this.userID = userID;
         this.monetaryValue = monetaryValue;
         this.dateAdded = new Date();
+        this.latLng = latLng;
     }
+
+    /**
+     * Method for getting the LatLng as a LatLng because Firebase reads numbers
+     * @return latLng as a LatLng
+     */
+    @Exclude
+    public LatLng getLatLngVal() {
+        return latLng;
+    }
+
+    public List<Double> getLatLng() {
+        if (latLng == null) {
+            return null;
+        } else {
+            ArrayList<Double> returnList = new ArrayList<>();
+            returnList.add(latLng.latitude);
+            returnList.add(latLng.longitude);
+            return returnList;
+        }
+    }
+
+    public void setLatLng(List<Double> list) {
+        if (list == null) {
+            latLng = null;
+        } else {
+            latLng = new LatLng(list.get(0), list.get(1));
+        }
+    }
+
 
     /**
      * Added method for getting the Category as an enum since Firebase used the default get()

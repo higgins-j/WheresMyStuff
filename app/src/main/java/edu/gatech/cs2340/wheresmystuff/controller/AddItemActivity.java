@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -112,7 +113,7 @@ public class AddItemActivity extends AppCompatActivity {
         } else {
             Item.Status itemStatus = (Item.Status) mSpinner.getSelectedItem();
 
-            Item item = new Item(title, "",Item.Category.TOY, itemStatus, FirebaseAuth.getInstance().getCurrentUser().getUid(), 0);
+            Item item = new Item(title, "",Item.Category.TOY, itemStatus, FirebaseAuth.getInstance().getCurrentUser().getUid(), 0, new LatLng(0, 0));
 
             String key = mDatabase.child("items").push().getKey();
 
