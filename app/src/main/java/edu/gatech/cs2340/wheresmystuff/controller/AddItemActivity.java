@@ -26,7 +26,8 @@ import edu.gatech.cs2340.wheresmystuff.model.Item;
  */
 public class AddItemActivity extends AppCompatActivity {
 
-    private EditText mTitle;
+    private EditText textTitle;
+    private EditText textDescription;
     private Spinner spinnerItemType;
     private Spinner spinnerCategory;
     private DatabaseReference mDatabase;
@@ -38,7 +39,8 @@ public class AddItemActivity extends AppCompatActivity {
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        mTitle = (EditText) findViewById(R.id.text_item_title);
+        textTitle = (EditText) findViewById(R.id.text_item_title);
+        textDescription = (EditText) findViewById(R.id.text_item_description);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -99,17 +101,18 @@ public class AddItemActivity extends AppCompatActivity {
      */
     private boolean tryCreateItem() {
         // Reset errors.
-        mTitle.setError(null);
+        textTitle.setError(null);
 
         // Store values at the time of the login attempt.
-        String title = mTitle.getText().toString();
+        String title = textTitle.getText().toString();
+        String description = textDescription.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
 
         if(TextUtils.isEmpty(title)) {
-            mTitle.setError("This field is required");
-            focusView = mTitle;
+            textTitle.setError("This field is required");
+            focusView = textTitle;
             cancel = true;
         } // else if its not a valid title?
 
@@ -120,7 +123,7 @@ public class AddItemActivity extends AppCompatActivity {
             Item.Category itemCategory = (Item.Category) spinnerCategory.getSelectedItem();
             Item.Status itemStatus = (Item.Status) spinnerItemType.getSelectedItem();
 
-            Item item = new Item(title, "", itemCategory, itemStatus, FirebaseAuth.getInstance().getCurrentUser().getUid(), 0, new LatLng(0, 0));
+            Item item = new Item(title, description, itemCategory, itemStatus, FirebaseAuth.getInstance().getCurrentUser().getUid(), 0, new LatLng(0, 0));
 
             String key = mDatabase.child("items").push().getKey();
 

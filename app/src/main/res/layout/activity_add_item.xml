@@ -32,7 +32,7 @@
         tools:context="edu.gatech.cs2340.wheresmystuff.controller.AddItemActivity">
 
         <android.support.design.widget.TextInputLayout
-            android:id="@+id/text_layout"
+            android:id="@+id/text_layout_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingTop="16dp"
@@ -44,8 +44,8 @@
                 android:id="@+id/text_item_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Item Title"
-                android:textSize="32sp" />
+                android:maxLines="1"
+                android:hint="Title" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -55,7 +55,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/text_layout" />
+            app:layout_constraintTop_toBottomOf="@id/text_layout_title" />
 
         <Spinner
             android:id="@+id/spinnerItemType"
@@ -64,7 +64,25 @@
             android:layout_height="wrap_content"
             app:layout_constraintLeft_toRightOf="@id/spinnerCategory"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/text_layout" />
+            app:layout_constraintTop_toBottomOf="@id/text_layout_title" />
+
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/text_layout_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="16dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/spinnerCategory">
+
+            <EditText
+                android:id="@+id/text_item_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Description (optional)" />
+
+        </android.support.design.widget.TextInputLayout>
 
     </android.support.constraint.ConstraintLayout>
 
