@@ -27,7 +27,8 @@ import edu.gatech.cs2340.wheresmystuff.model.Item;
 public class AddItemActivity extends AppCompatActivity {
 
     private EditText mTitle;
-    private Spinner mSpinner;
+    private Spinner spinnerItemType;
+    private Spinner spinnerCategory;
     private DatabaseReference mDatabase;
 
     @Override
@@ -49,14 +50,19 @@ public class AddItemActivity extends AppCompatActivity {
             actionBar.setHomeAsUpIndicator(R.drawable.ic_clear_white_24dp);
         }
 
-        mSpinner = (Spinner) findViewById(R.id.spinnerItemType);
-
+        spinnerItemType = (Spinner) findViewById(R.id.spinnerItemType);
+        spinnerCategory = (Spinner) findViewById(R.id.spinnerCategory);
 
         ArrayAdapter<Item.Status> accountTypeArrayAdapter = new ArrayAdapter<>(
                 this, android.R.layout.simple_spinner_dropdown_item, Item.Status.values());
         accountTypeArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mSpinner.setAdapter(accountTypeArrayAdapter);
-        mSpinner.setSelection(1);
+        spinnerItemType.setAdapter(accountTypeArrayAdapter);
+        spinnerItemType.setSelection(1);
+
+        ArrayAdapter<Item.Category> categoryArrayAdapter = new ArrayAdapter<>(
+                this, android.R.layout.simple_spinner_dropdown_item, Item.Category.values());
+        categoryArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerCategory.setAdapter(categoryArrayAdapter);
     }
 
     @Override
@@ -111,9 +117,10 @@ public class AddItemActivity extends AppCompatActivity {
             focusView.requestFocus();
             return false;
         } else {
-            Item.Status itemStatus = (Item.Status) mSpinner.getSelectedItem();
+            Item.Category itemCategory = (Item.Category) spinnerCategory.getSelectedItem();
+            Item.Status itemStatus = (Item.Status) spinnerItemType.getSelectedItem();
 
-            Item item = new Item(title, "",Item.Category.TOY, itemStatus, FirebaseAuth.getInstance().getCurrentUser().getUid(), 0, new LatLng(0, 0));
+            Item item = new Item(title, "", itemCategory, itemStatus, FirebaseAuth.getInstance().getCurrentUser().getUid(), 0, new LatLng(0, 0));
 
             String key = mDatabase.child("items").push().getKey();
 
