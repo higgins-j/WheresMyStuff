@@ -85,7 +85,6 @@ public class User {
 
     public void setAddress(String newAddress) {
         address = newAddress;
-
     }
 
     public void setBalance(double newBalance) {
