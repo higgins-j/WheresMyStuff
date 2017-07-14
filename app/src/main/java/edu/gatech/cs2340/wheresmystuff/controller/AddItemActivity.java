@@ -1,5 +1,8 @@
 package edu.gatech.cs2340.wheresmystuff.controller;
 
+import android.location.Address;
+import android.location.Geocoder;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +21,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import edu.gatech.cs2340.wheresmystuff.R;
 import edu.gatech.cs2340.wheresmystuff.model.Item;
 
@@ -28,6 +35,7 @@ public class AddItemActivity extends AppCompatActivity {
 
     private EditText textTitle;
     private EditText textDescription;
+    private EditText textLocation;
     private Spinner spinnerItemType;
     private Spinner spinnerCategory;
     private DatabaseReference mDatabase;
@@ -41,6 +49,7 @@ public class AddItemActivity extends AppCompatActivity {
 
         textTitle = (EditText) findViewById(R.id.text_item_title);
         textDescription = (EditText) findViewById(R.id.text_item_description);
+        textLocation = (EditText) findViewById(R.id.text_item_location);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -106,20 +115,29 @@ public class AddItemActivity extends AppCompatActivity {
         // Store values at the time of the login attempt.
         String title = textTitle.getText().toString();
         String description = textDescription.getText().toString();
+        String location = textLocation.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
 
-        if(TextUtils.isEmpty(title)) {
+
+        if (TextUtils.isEmpty(location)) {
+            textLocation.setError("This field is required");
+            focusView = textLocation;
+            cancel = true;
+        }
+        if (TextUtils.isEmpty(title)) {
             textTitle.setError("This field is required");
             focusView = textTitle;
             cancel = true;
-        } // else if its not a valid title?
+        }
 
         if (cancel) {
             focusView.requestFocus();
             return false;
         } else {
+
+
             Item.Category itemCategory = (Item.Category) spinnerCategory.getSelectedItem();
             Item.Status itemStatus = (Item.Status) spinnerItemType.getSelectedItem();
 
@@ -130,9 +148,46 @@ public class AddItemActivity extends AppCompatActivity {
             mDatabase.child("items").child(key).setValue(item);
             //TODO: add item key to User's item list
 
+            if (location != null && !location.equals("")) {
+                new GeocoderTask(key).execute(location);
+            }
+
             Log.d("AddItem", "mDatabase:setValue");
             return true;
         }
 
+    }
+
+    private class GeocoderTask extends AsyncTask<String, Void, Address> {
+
+        private String itemID;
+
+        public GeocoderTask(String itemID) {
+            this.itemID = itemID;
+        }
+
+        @Override
+        protected Address doInBackground(String... locationName) {
+            // Creating an instance of Geocoder class
+            Geocoder geocoder = new Geocoder(getBaseContext());
+            List<Address> addresses = null;
+
+            try {
+                // Getting a maximum of 3 Address that matches the input text
+                addresses = geocoder.getFromLocationName(locationName[0], 1);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return addresses.get(0);
+        }
+
+        @Override
+        protected void onPostExecute(Address address) {
+            ArrayList<Double> latLng = new ArrayList<>();
+            latLng.add(address.getLatitude());
+            latLng.add(address.getLongitude());
+
+            mDatabase.child("items").child(itemID).child("latLng").setValue(latLng);
+        }
     }
 }

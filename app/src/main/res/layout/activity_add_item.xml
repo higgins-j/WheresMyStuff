@@ -44,8 +44,8 @@
                 android:id="@+id/text_item_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:hint="Title" />
+                android:hint="Title"
+                android:maxLines="1" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -66,6 +66,22 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/text_layout_title" />
 
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/text_layout_location"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="16dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/spinnerCategory">
+
+            <EditText
+                android:id="@+id/text_item_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Location" />
+
+        </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/text_layout_description"
@@ -74,7 +90,7 @@
             android:paddingTop="16dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/spinnerCategory">
+            app:layout_constraintTop_toBottomOf="@id/text_layout_location">
 
             <EditText
                 android:id="@+id/text_item_description"
