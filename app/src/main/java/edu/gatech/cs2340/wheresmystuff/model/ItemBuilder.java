@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.Date;
 
 /*
-  @author John Abrams
- * @version 1.0
+ * @author John Abrams & Hartley McGuire
+ * @version 1.1
  */
 
 /**
@@ -15,7 +15,6 @@ import java.util.Date;
 public class ItemBuilder implements ItemBuilderInterface {
 
     private Item item;
-    private ArrayList<Double> location;
 
     /**
      * Constructor
@@ -37,7 +36,10 @@ public class ItemBuilder implements ItemBuilderInterface {
 
     @Override
     public ItemBuilder setLatLng(final LatLng latLng) {
-        item.setLatLng(item.getLatLng());
+        ArrayList<Double> list = new ArrayList<>();
+        list.add(latLng.latitude);
+        list.add(latLng.longitude);
+        item.setLatLng(list);
         return this;
     }
 
@@ -48,16 +50,21 @@ public class ItemBuilder implements ItemBuilderInterface {
     }
 
     @Override
-    public ItemBuilder setCategory(final String cat) {
-        item.setCategory(cat);
+    public ItemBuilder setCategory(final Item.Category cat) {
+        item.setCategory(cat.toString());
         return this;
     }
 
     @Override
-    public ItemBuilder setStatus(final String stat) {
-        item.setStatus(stat);
+    public ItemBuilder setStatus(final Item.Status stat) {
+        item.setStatus(stat.toString());
         return this;
     }
 
+    @Override
+    public ItemBuilder setUser(final String userID) {
+        item.setUserID(userID);
+        return this;
+    }
 
 }

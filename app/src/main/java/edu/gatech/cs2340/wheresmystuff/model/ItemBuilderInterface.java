@@ -20,7 +20,9 @@ public interface ItemBuilderInterface {
 
     ItemBuilder setDescription(final String desc);
 
-    ItemBuilder setCategory(final String cat);
+    ItemBuilder setCategory(final Item.Category cat);
 
-    ItemBuilder setStatus(final String stat);
+    ItemBuilder setStatus(final Item.Status stat);
+
+    ItemBuilder setUser(final String userID);
 }

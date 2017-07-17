@@ -1,8 +1,12 @@
 package edu.gatech.cs2340.wheresmystuff.controller;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -27,15 +31,20 @@ import java.util.List;
 
 import edu.gatech.cs2340.wheresmystuff.R;
 import edu.gatech.cs2340.wheresmystuff.model.Item;
+import edu.gatech.cs2340.wheresmystuff.model.ItemBuilder;
 
 /**
  * A dialog to create a new item listing
  */
 public class AddItemActivity extends AppCompatActivity {
 
+    private View mAddItemView;
+    private View mProgressView;
+
     private EditText textTitle;
     private EditText textDescription;
     private EditText textLocation;
+
     private Spinner spinnerItemType;
     private Spinner spinnerCategory;
     private DatabaseReference mDatabase;
@@ -74,6 +83,9 @@ public class AddItemActivity extends AppCompatActivity {
                 this, android.R.layout.simple_spinner_dropdown_item, Item.Category.values());
         categoryArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCategory.setAdapter(categoryArrayAdapter);
+
+        mAddItemView = findViewById(R.id.add_item_form);
+        mProgressView = findViewById(R.id.login_progress);
     }
 
     @Override
@@ -91,10 +103,7 @@ public class AddItemActivity extends AppCompatActivity {
             finish();
             return true;
         } else if (id == R.id.action_save) {
-            if (tryCreateItem()) {
-                finish();
-            }
-
+            tryCreateItem();
             return true;
         }
 
@@ -108,11 +117,10 @@ public class AddItemActivity extends AppCompatActivity {
      *
      * @return if the Item was created successfully
      */
-    private boolean tryCreateItem() {
+    private void tryCreateItem() {
         // Reset errors.
         textTitle.setError(null);
 
-        // Store values at the time of the login attempt.
         String title = textTitle.getText().toString();
         String description = textDescription.getText().toString();
         String location = textLocation.getText().toString();
@@ -134,26 +142,10 @@ public class AddItemActivity extends AppCompatActivity {
 
         if (cancel) {
             focusView.requestFocus();
-            return false;
         } else {
+            showProgress(true);
 
-
-            Item.Category itemCategory = (Item.Category) spinnerCategory.getSelectedItem();
-            Item.Status itemStatus = (Item.Status) spinnerItemType.getSelectedItem();
-
-            Item item = new Item(title, description, itemCategory, itemStatus, FirebaseAuth.getInstance().getCurrentUser().getUid(), 0, new LatLng(0, 0));
-
-            String key = mDatabase.child("items").push().getKey();
-
-            mDatabase.child("items").child(key).setValue(item);
-            //TODO: add item key to User's item list
-
-            if (location != null && !location.equals("")) {
-                new GeocoderTask(key).execute(location);
-            }
-
-            Log.d("AddItem", "mDatabase:setValue");
-            return true;
+            new GeocoderTask(title, description, location).execute(location);
         }
 
     }
@@ -161,9 +153,13 @@ public class AddItemActivity extends AppCompatActivity {
     private class GeocoderTask extends AsyncTask<String, Void, Address> {
 
         private String itemID;
+        private String title;
+        private String description;
 
-        public GeocoderTask(String itemID) {
+        public GeocoderTask(String title, String description, String itemID) {
             this.itemID = itemID;
+            this.title = title;
+            this.description = description;
         }
 
         @Override
@@ -174,20 +170,83 @@ public class AddItemActivity extends AppCompatActivity {
 
             try {
                 // Getting a maximum of 3 Address that matches the input text
+                Log.d("Geocoder:doInBackground", locationName[0]);
                 addresses = geocoder.getFromLocationName(locationName[0], 1);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            return addresses.get(0);
+
+            return addresses.size() == 0
+                    ? null
+                    : addresses.get(0);
         }
 
         @Override
         protected void onPostExecute(Address address) {
-            ArrayList<Double> latLng = new ArrayList<>();
-            latLng.add(address.getLatitude());
-            latLng.add(address.getLongitude());
+            if (address == null) {
+                textLocation.setError("Could not understand location");
+                textLocation.requestFocus();
+                showProgress(false);
+            } else {
+                Item.Category itemCategory = (Item.Category) spinnerCategory.getSelectedItem();
+                Item.Status itemStatus = (Item.Status) spinnerItemType.getSelectedItem();
+//                Item item = new Item(title, description, itemCategory, itemStatus, FirebaseAuth.getInstance().getCurrentUser().getUid(), 0, new LatLng(0, 0));
 
-            mDatabase.child("items").child(itemID).child("latLng").setValue(latLng);
+                Item item = new ItemBuilder()
+                        .setTitle(title)
+                        .setDescription(description)
+                        .setCategory(itemCategory)
+                        .setStatus(itemStatus)
+                        .setUser(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                        .setLatLng(new LatLng(address.getLatitude(), address.getLongitude()))
+                        .build();
+
+                //TODO: add item key to User's item list
+
+                String key = mDatabase.child("items").push().getKey();
+
+                mDatabase.child("items").child(key).setValue(item);
+
+                showProgress(false);
+                finish();
+            }
+        }
+    }
+
+
+    /**
+     * Shows the progress UI and hides the login form.
+     */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            mAddItemView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mAddItemView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mAddItemView.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mProgressView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            // The ViewPropertyAnimator APIs are not available, so simply show
+            // and hide the relevant UI components.
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mAddItemView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
 }
