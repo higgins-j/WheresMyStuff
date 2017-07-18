@@ -31,8 +31,6 @@ import edu.gatech.cs2340.wheresmystuff.R;
 public class LoginActivity extends AppCompatActivity {
 
     // UI references.
-    private EditText mEmailView;
-    private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
 
@@ -42,25 +40,26 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        // Set up the login form.
-        mEmailView = (EditText) findViewById(R.id.email);
-        mPasswordView = (EditText) findViewById(R.id.password);
+
+        final EditText mEmailView = (EditText) findViewById(R.id.email);
+        final EditText mPasswordView = (EditText) findViewById(R.id.password);
+
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
+                    attemptLogin(mEmailView, mPasswordView);
                     return true;
                 }
                 return false;
             }
         });
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+        final Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptLogin();
+                attemptLogin(mEmailView, mPasswordView);
             }
         });
 
@@ -75,50 +74,33 @@ public class LoginActivity extends AppCompatActivity {
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
-    private void attemptLogin() {
-        // Reset errors.
-        mEmailView.setError(null);
-        mPasswordView.setError(null);
-
-        // Store values at the time of the login attempt.
-        String email = mEmailView.getText().toString();
-        String password = mPasswordView.getText().toString();
+    private void attemptLogin(final EditText emailView, final EditText passwordView) {
+        emailView.setError(null);
+        passwordView.setError(null);
 
         boolean cancel = false;
         View focusView = null;
 
-        // Check for a valid password, if the user entered one.
-        if (TextUtils.isEmpty(password)) {
-            mPasswordView.setError(getString(R.string.error_field_required));
-            focusView = mPasswordView;
-            cancel = true;
-        } else if (!isPasswordValid(password)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
-            focusView = mPasswordView;
+        if (isPasswordInvalid(passwordView)) {
+            focusView = passwordView;
             cancel = true;
         }
-
-        // Check for a valid email address.
-        if (TextUtils.isEmpty(email)) {
-            mEmailView.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
-            cancel = true;
-        } else if (!isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailView;
+        if (isEmailInvalid(emailView)) {
+            focusView = emailView;
             cancel = true;
         }
 
         if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
             focusView.requestFocus();
-        } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
+        }
+
+        if (!cancel) {
+            // Show a progress spinner, and start background call to Firebase to sign in
             showProgress(true);
 
-            mAuth.signInWithEmailAndPassword(email, password)
+            mAuth.signInWithEmailAndPassword(
+                    emailView.getText().toString(),
+                    passwordView.getText().toString())
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
@@ -129,9 +111,9 @@ public class LoginActivity extends AppCompatActivity {
                                 finish();
                                 startActivity(i);
                             } else {
-                                mEmailView.setError(getString(R.string.error_email_password_match));
-                                mPasswordView.setError(getString(R.string.error_email_password_match));
-                                mPasswordView.requestFocus();
+                                emailView.setError(getString(R.string.error_email_password_match));
+                                passwordView.setError(getString(R.string.error_email_password_match));
+                                passwordView.requestFocus();
                                 showProgress(false);
                             }
                         }
@@ -140,18 +122,37 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     /**
-     * Checks if the email is valid
-     * @param email the email to check
-     * @return if the email is valid or not
+     * Checks if the email in an EditText is valid
+     * @param emailView the emailView to check
+     * @return if the email is invalid or not
      */
-    private boolean isEmailValid(String email) {
+    private boolean isEmailInvalid(EditText emailView) {
+        String email = emailView.getText().toString();
+        if (TextUtils.isEmpty(email)) {
+            emailView.setError(getString(R.string.error_field_required));
+            return true;
+        } else if (!email.contains("@")) {
+            emailView.setError(getString(R.string.error_invalid_email));
+            return true;
+        } else return false;
         //TODO: Add more thorough email verification technique
-        return email.contains("@");
     }
 
-    private boolean isPasswordValid(String password) {
+    /**
+     * Checks if the password in an EditText is valid
+     * @param passwordView the EditText to check
+     * @return if the password is invalid or not
+     */
+    private boolean isPasswordInvalid(EditText passwordView) {
+        String password = passwordView.getText().toString();
+        if (TextUtils.isEmpty(password)) {
+            passwordView.setError(getString(R.string.error_field_required));
+            return true;
+        } else if (password.length() < 7) {
+            passwordView.setError(getString(R.string.error_invalid_password));
+            return true;
+        } else return false;
         //TODO: Add more thorough password requirement
-        return password.length() > 7;
     }
 
     /**
