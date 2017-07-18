@@ -69,6 +69,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         filteredItemList.add(item.getValue(Item.class));
                     }
                 }
+                addMapMarkers(filteredItemList);
             }
 
             @Override
@@ -109,16 +110,27 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        addMapMarkers(filteredItemList);
+//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+    }
 
-        for (Item i : filteredItemList) {
-            Log.d("onMapReady:", "Added item " + i.getTitle());
-            mMap.addMarker(
-                    new MarkerOptions()
-                            .position(i.getLatLngVal())
-                            .title(i.getTitle())
-                            .snippet(i.getDescription()));
+    /**
+     * Helper method for adding a list of Items to the Google Map
+     *
+     * @param itemList the list of Items to add to the Map
+     */
+    private void addMapMarkers(ArrayList<Item> itemList) {
+        if (mMap != null) {
+            mMap.clear();
+            for (Item i : itemList) {
+                Log.d("onMapReady:", "Added item " + i.getTitle());
+                mMap.addMarker(
+                        new MarkerOptions()
+                                .position(i.getLatLngVal())
+                                .title(i.getTitle())
+                                .snippet(i.getDescription()));
+            }
         }
-
         mMap.moveCamera(CameraUpdateFactory.newLatLng(filteredItemList.get(filteredItemList.size() - 1).getLatLngVal()));
     }
 }
