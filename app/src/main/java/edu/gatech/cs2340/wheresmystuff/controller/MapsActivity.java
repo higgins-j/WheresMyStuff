@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.Window;
 
+import com.google.android.gms.maps.*;
+
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -117,6 +119,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             .snippet(i.getDescription()));
         }
 
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(filteredItemList.get(filteredItemList.size() - 1).getLatLngVal()));
     }
 }
