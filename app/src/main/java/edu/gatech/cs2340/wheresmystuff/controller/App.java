@@ -22,9 +22,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 
 import edu.gatech.cs2340.wheresmystuff.R;
@@ -217,6 +215,10 @@ public class App extends AppCompatActivity {
             FirebaseAuth.getInstance().signOut();
             finish();
             return true;
+        } else if (id == R.id.action_map_view) {
+            Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+            intent.putExtra("filter", (Item.Status) mSpinner.getSelectedItem());
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
