@@ -2,7 +2,6 @@ package edu.gatech.cs2340.wheresmystuff.model;
 
 import com.google.android.gms.maps.model.LatLng;
 import java.util.ArrayList;
-import java.util.Date;
 
 /*
  * @author John Abrams & Hartley McGuire
@@ -14,7 +13,7 @@ import java.util.Date;
  */
 public class ItemBuilder implements ItemBuilderInterface {
 
-    private Item item;
+    private final Item item;
 
     /**
      * Constructor

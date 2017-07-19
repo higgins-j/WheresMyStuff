@@ -19,7 +19,7 @@ public class FakeFirebase {
      * Registration and Sign In
      */
     private User user;
-    private HashMap<String, User> userList = new HashMap<>();
+    private final HashMap<String, User> userList = new HashMap<>();
 
     public boolean register(String email, String password) {
         if (userList.containsKey(email)) {
@@ -44,7 +44,7 @@ public class FakeFirebase {
     }
 
     public boolean login(String email, String password) {
-        if (userList.containsKey(email)) {
+        if (userList.containsKey(email) && userList.get(email).getPass().equals(password)) {
             user = userList.get(email);
             return true;
         } else {

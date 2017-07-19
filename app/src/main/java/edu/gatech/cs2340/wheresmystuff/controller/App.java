@@ -33,17 +33,14 @@ import edu.gatech.cs2340.wheresmystuff.model.Item;
  */
 public class App extends AppCompatActivity {
 
-    private DatabaseReference mItems;
     private Spinner mSpinner;
-    private ListView listView;
     private ArrayAdapter<String> arrayAdapter;
 
     private final ArrayList<String> lostItemList = new ArrayList<>();
     private final ArrayList<String> foundItemList = new ArrayList<>();
     private final ArrayList<String> neededItemList = new ArrayList<>();
 
-    private ArrayList<String> selectedItemList = new ArrayList<>();
-    private ArrayList<String> visibleItemList = new ArrayList<>();
+    private final ArrayList<String> visibleItemList = new ArrayList<>();
 
     private boolean searching = false;
     private String lastText = "";
@@ -54,8 +51,9 @@ public class App extends AppCompatActivity {
         setContentView(R.layout.activity_app);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
 
         mSpinner = new Spinner(getApplicationContext());
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -85,15 +83,14 @@ public class App extends AppCompatActivity {
             }
         });
 
-        listView = (ListView) findViewById(R.id.list_items);
+        ListView listView = (ListView) findViewById(R.id.list_items);
         arrayAdapter = new ArrayAdapter<>(
                 getApplicationContext(),
                 android.R.layout.simple_list_item_1,
                 visibleItemList);
         listView.setAdapter(arrayAdapter);
-        //final ArrayList<String> itemList = new ArrayList<>();
 
-        mItems = FirebaseDatabase.getInstance().getReference().child("items");
+        DatabaseReference mItems = FirebaseDatabase.getInstance().getReference().child("items");
         mItems.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -101,16 +98,19 @@ public class App extends AppCompatActivity {
                 foundItemList.clear();
                 neededItemList.clear();
                 for (DataSnapshot item : dataSnapshot.getChildren()) {
-                    switch (item.getValue(Item.class).getStatusVal()) {
-                        case LOST:
-                            lostItemList.add(item.getValue(Item.class).getTitle());
-                            break;
-                        case FOUND:
-                            foundItemList.add(item.getValue(Item.class).getTitle());
-                            break;
-                        case NEEDED:
-                            neededItemList.add(item.getValue(Item.class).getTitle());
-                            break;
+                    Item currentItem = item.getValue(Item.class);
+                    if (currentItem != null) {
+                        switch (currentItem.getStatusVal()) {
+                            case LOST:
+                                lostItemList.add(currentItem.getTitle());
+                                break;
+                            case FOUND:
+                                foundItemList.add(currentItem.getTitle());
+                                break;
+                            case NEEDED:
+                                neededItemList.add(currentItem.getTitle());
+                                break;
+                        }
                     }
                 }
                 if (!searching) {
