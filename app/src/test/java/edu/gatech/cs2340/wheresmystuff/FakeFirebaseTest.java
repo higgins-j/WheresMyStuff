@@ -4,11 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.HashMap;
-
 import edu.gatech.cs2340.wheresmystuff.model.FakeFirebase;
-import edu.gatech.cs2340.wheresmystuff.model.User;
-import static org.junit.Assert.*;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
