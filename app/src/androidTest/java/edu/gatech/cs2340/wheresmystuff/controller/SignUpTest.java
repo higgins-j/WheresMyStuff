@@ -1,14 +1,11 @@
 package edu.gatech.cs2340.wheresmystuff.controller;
 
 import android.support.test.espresso.ViewInteraction;
-import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
-import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import edu.gatech.cs2340.wheresmystuff.R;
 
@@ -22,9 +19,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 
 public class SignUpTest {
-    private SignUpActivity signUpActivity;
 
-    final private String badUsername = "xxx";
     final private String goodUsername = "test@gatech.edu";
     final private String goodPassword = "password";
     final private String badPassword = "123456";
@@ -42,11 +37,10 @@ public class SignUpTest {
 
     @Before
     public void setUp() {
-        signUpActivity = SignUpActivity.getInstance();
         email = onView(withId(R.id.email));
-        password = onView(withId(R.id.password));
-        passwordTwo = onView(withId(R.id.passwordTwo));
-        button = onView(withId(R.id.email_sign_up_button));
+        password = onView(withId(R.id.password_one));
+        passwordTwo = onView(withId(R.id.password_two));
+        button = onView(withId(R.id.email_sign_in_button));
 
 
     }
@@ -93,6 +87,7 @@ public class SignUpTest {
 
     @Test
     public void testAttemptSignupBadEmail() {
+        String badUsername = "xxx";
         email.perform(typeText(badUsername));
         password.perform(typeText(goodPassword));
         password.perform(typeText(goodPassword));

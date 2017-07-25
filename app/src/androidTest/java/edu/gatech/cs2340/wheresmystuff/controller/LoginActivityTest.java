@@ -28,12 +28,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 @LargeTest
 public class LoginActivityTest {
 
-    final private String badUsername = "test";
-    final private String goodUsername = "junit@gatech.edu";
-
-    final private String badPassword = "123456";
-    final private String goodPassword = "password";
-
     private ViewInteraction email;
     private ViewInteraction password;
     private ViewInteraction button;
@@ -52,7 +46,7 @@ public class LoginActivityTest {
 
     @Test
     public void testAttemptLoginBlankPassword() {
-        email.perform(typeText(goodUsername));
+        email.perform(typeText("junit@gatech.edu"));
         closeSoftKeyboard();
         button.perform(click());
 
@@ -61,8 +55,8 @@ public class LoginActivityTest {
 
     @Test
     public void testAttemptLoginShortPassword() {
-        email.perform(typeText(goodUsername));
-        password.perform(typeText(badPassword));
+        email.perform(typeText("junit@gatech.edu"));
+        password.perform(typeText("123456"));
         closeSoftKeyboard();
         button.perform(click());
 
@@ -71,7 +65,7 @@ public class LoginActivityTest {
 
     @Test
     public void testAttemptLoginBlankEmail() {
-        password.perform(typeText(goodPassword));
+        password.perform(typeText("password"));
         closeSoftKeyboard();
         button.perform(click());
 
@@ -80,8 +74,8 @@ public class LoginActivityTest {
 
     @Test
     public void testAttemptLoginBadEmail() {
-        email.perform(typeText(badUsername));
-        password.perform(typeText(goodPassword));
+        email.perform(typeText("test"));
+        password.perform(typeText("password"));
         closeSoftKeyboard();
         button.perform(click());
 
@@ -90,8 +84,8 @@ public class LoginActivityTest {
 
     @Test
     public void testAttemptLoginGood() {
-        email.perform(typeText(goodUsername));
-        password.perform(typeText(goodPassword));
+        email.perform(typeText("junit@gatech.edu"));
+        password.perform(typeText("password"));
         closeSoftKeyboard();
         button.perform(click());
 

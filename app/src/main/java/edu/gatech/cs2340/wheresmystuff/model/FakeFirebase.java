@@ -15,10 +15,6 @@ public class FakeFirebase {
     }
     private FakeFirebase() {}
 
-    /*
-     * Registration and Sign In
-     */
-    private User user;
     private final HashMap<String, User> userList = new HashMap<>();
 
     public HashMap<String, User> getUserList() {
@@ -37,33 +33,8 @@ public class FakeFirebase {
         } else {
             User newUser = new User(email, password);
             userList.put(email, newUser);
-            user = newUser;
             return true;
         }
-    }
-
-    public boolean registerAdmin(String email, String password) {
-        if (userList.containsKey(email)) {
-            return false;
-        } else {
-            User newUser = new Admin(email, password);
-            userList.put(email, newUser);
-            user = newUser;
-            return true;
-        }
-    }
-
-    public boolean login(String email, String password) {
-        if (userList.containsKey(email) && userList.get(email).getPass().equals(password)) {
-            user = userList.get(email);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public void signOut() {
-        user = null;
     }
 
     /*

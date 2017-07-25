@@ -11,7 +11,7 @@ import java.util.ArrayList;
 /**
  * This class represents an Item Builder
  */
-public class ItemBuilder implements ItemBuilderInterface {
+public class ItemBuilder {
 
     private final Item item;
 
@@ -22,18 +22,18 @@ public class ItemBuilder implements ItemBuilderInterface {
         item = new Item();
     }
 
-    @Override
+    //@Override
     public Item build() {
         return item;
     }
 
-    @Override
+    //@Override
     public ItemBuilder setTitle(final String title) {
         item.setTitle(title);
         return this;
     }
 
-    @Override
+    //@Override
     public ItemBuilder setLatLng(final LatLng latLng) {
         ArrayList<Double> list = new ArrayList<>();
         list.add(latLng.latitude);
@@ -42,25 +42,25 @@ public class ItemBuilder implements ItemBuilderInterface {
         return this;
     }
 
-    @Override
+    //@Override
     public ItemBuilder setDescription(final String desc) {
         item.setDescription(desc);
         return this;
     }
 
-    @Override
+    //@Override
     public ItemBuilder setCategory(final Item.Category cat) {
         item.setCategory(cat.toString());
         return this;
     }
 
-    @Override
+    //@Override
     public ItemBuilder setStatus(final Item.Status stat) {
         item.setStatus(stat.toString());
         return this;
     }
 
-    @Override
+    //@Override
     public ItemBuilder setUser(final String userID) {
         item.setUserID(userID);
         return this;

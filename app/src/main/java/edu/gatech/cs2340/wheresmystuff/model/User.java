@@ -8,36 +8,19 @@ import java.util.ArrayList;
  * @version 1.2
  */
 
-public class User {
+class User {
     private String user;
     private String pass;
-    private String name;
-    private String phoneNum;
-    private String address;
-    private AccountState accountState;
     private final ArrayList<Item> lostItems = new ArrayList<>();
     private final ArrayList<Item> foundItems = new ArrayList<>();
     private final ArrayList<Item> neededItems = new ArrayList<>();
-    private double balance;
 
     /*
     Constructor
      */
-    User(String user, String pass, String name, String phoneNum,
-         String address, AccountState accountState) {
+    User(String user, String pass) {
         this.user = user;
         this.pass = pass;
-        this.name = name;
-        this.phoneNum = phoneNum;
-        this.address = address;
-        this.accountState = accountState;
-        this.balance = 0;
-
-    }
-
-    public User(String user, String pass) {
-        this(user, pass, null, null, null, AccountState.ACTIVE);
-
     }
 
     public String getUser() {
@@ -56,42 +39,6 @@ public class User {
         this.pass = newPass;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String newName) {
-        name = newName;
-    }
-
-    public String getPhoneNum() {
-        return phoneNum;
-    }
-
-    public void setPhoneNum(String newPhoneNum) {
-        phoneNum = newPhoneNum;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String newAddress) {
-        address = newAddress;
-    }
-
-    public void setBalance(double newBalance) {
-        balance = newBalance;
-    }
-
-    public AccountState getAccountState() {
-        return accountState;
-    }
-
-    void setAccountState(AccountState newAccountState) {
-        accountState = newAccountState;
-    }
-
     public ArrayList<Item> getLostItems() {
         return lostItems;
     }
@@ -103,8 +50,6 @@ public class User {
     public ArrayList<Item> getNeededItems() {
         return neededItems;
     }
-
-    public double getBalance() { return balance; }
 
     /**
      * Adds a lost item that the user lost and is looking for into the array
@@ -134,22 +79,6 @@ public class User {
      */
     public boolean addNeededItem(Item neededItem) {
         return neededItems.add(neededItem);
-    }
-
-    /**
-     * Adds a monetary amount to user's balance
-     * @param amount the monetary amount being added
-     */
-    public void addToBal(double amount) {
-        balance = balance + amount;
-    }
-
-    /**
-     * Subtracts a monetary amount from user's balance
-     * @param amount the monetary amount being subtracted
-     */
-    public void subtractFromBal(double amount) {
-        balance = balance - amount;
     }
 
     /**

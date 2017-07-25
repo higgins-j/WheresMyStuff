@@ -7,9 +7,7 @@ import org.junit.Test;
 import edu.gatech.cs2340.wheresmystuff.model.FakeFirebase;
 
 /**
- * Example local unit test, which will execute on the development machine (host).
- *
- * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
+ * Tests methods of the FakeFirebase class
  */
 public class FakeFirebaseTest {
 
@@ -18,11 +16,17 @@ public class FakeFirebaseTest {
     public FakeFirebaseTest() {
     }
 
+    /**
+     * Creating an instance of FakeFirebase for the tests
+     */
     @Before
     public void setUp() {
         fakeFirebase = FakeFirebase.getInstance();
     }
 
+    /**
+     * Testing the register method
+     */
     @Test
     public void testRegister() {
         //Checking if userList is empty
