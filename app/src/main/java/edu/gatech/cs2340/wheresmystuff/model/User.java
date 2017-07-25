@@ -2,15 +2,10 @@ package edu.gatech.cs2340.wheresmystuff.model;
 
 import java.util.ArrayList;
 
-
-
 /**
+ * This class represents a user
  * @author Monira Khan & John Abrams
  * @version 1.2
- */
-
-/*
-This class represents a user
  */
 
 public class User {
@@ -20,18 +15,16 @@ public class User {
     private String phoneNum;
     private String address;
     private AccountState accountState;
-    private ArrayList<Item> lostItems = new ArrayList<>();
-    private ArrayList<Item> foundItems = new ArrayList<>();
-    private ArrayList<Item> neededItems = new ArrayList<>();
+    private final ArrayList<Item> lostItems = new ArrayList<>();
+    private final ArrayList<Item> foundItems = new ArrayList<>();
+    private final ArrayList<Item> neededItems = new ArrayList<>();
     private double balance;
-    private ArrayList<CreditCard> cards;
-
 
     /*
     Constructor
      */
-    public User(String user, String pass, String name, String phoneNum,
-        String address, AccountState accountState) {
+    User(String user, String pass, String name, String phoneNum,
+         String address, AccountState accountState) {
         this.user = user;
         this.pass = pass;
         this.name = name;
@@ -95,9 +88,8 @@ public class User {
         return accountState;
     }
 
-    public AccountState setAccountState(AccountState newAccountState) {
+    void setAccountState(AccountState newAccountState) {
         accountState = newAccountState;
-        return accountState;
     }
 
     public ArrayList<Item> getLostItems() {
@@ -114,11 +106,9 @@ public class User {
 
     public double getBalance() { return balance; }
 
-    public ArrayList<CreditCard> getCards() { return cards; }
-
     /**
      * Adds a lost item that the user lost and is looking for into the array
-     * listof their lost items
+     * list of their lost items
      * @param lostItem [item to add into the list]
      * @return boolean is it was successful
      */
@@ -137,22 +127,13 @@ public class User {
     }
 
     /**
-     * Adds a needed item that the user needs into the aray list of their needed
+     * Adds a needed item that the user needs into the array list of their needed
      * items
      * @param  neededItem [item to add into the list]
      * @return            [returns if it was successful]
      */
     public boolean addNeededItem(Item neededItem) {
         return neededItems.add(neededItem);
-    }
-
-    /**
-     * Adds a credit card to the user's account
-     * @param card the credit card being added
-     * @return true if it was successful and false otherwise
-     */
-    public boolean addCard(CreditCard card) {
-        return cards.add(card);
     }
 
     /**

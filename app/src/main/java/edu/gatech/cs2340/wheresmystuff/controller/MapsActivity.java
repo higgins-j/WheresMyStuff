@@ -11,9 +11,6 @@ import android.view.Window;
 
 import com.google.android.gms.maps.*;
 
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -29,8 +26,7 @@ import edu.gatech.cs2340.wheresmystuff.model.Item;
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    private DatabaseReference itemReference;
-    private ArrayList<Item> filteredItemList = new ArrayList<>();
+    private final ArrayList<Item> filteredItemList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,14 +54,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
 
 
-        itemReference = FirebaseDatabase.getInstance().getReference().child("items");
+        DatabaseReference itemReference = FirebaseDatabase.getInstance().getReference().child("items");
         itemReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 filteredItemList.clear();
                 for (DataSnapshot item : dataSnapshot.getChildren()) {
-                    Log.d("onDataChange:", item.getValue(Item.class).getTitle());
-                    if (item.getValue(Item.class).getStatusVal() == filter) {
+                    Item currentItem = item.getValue(Item.class);
+                    if (currentItem != null && currentItem.getStatusVal() == filter) {
                         filteredItemList.add(item.getValue(Item.class));
                     }
                 }

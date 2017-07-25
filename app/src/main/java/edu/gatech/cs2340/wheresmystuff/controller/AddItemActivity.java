@@ -24,11 +24,11 @@ import android.widget.Spinner;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import edu.gatech.cs2340.wheresmystuff.R;
@@ -121,8 +121,6 @@ public class AddItemActivity extends AppCompatActivity {
      * Tries to add a new item to the Firebase database
      * If required fields in the form are empty, the errors are
      * presented and no actual data is added to the database
-     *
-     * @return if the Item was created successfully
      */
     private void tryCreateItem() {
         // Reset errors.
@@ -152,19 +150,17 @@ public class AddItemActivity extends AppCompatActivity {
         } else {
             showProgress(true);
 
-            new GeocoderTask(title, description, location).execute(location);
+            new GeocoderTask(title, description).execute(location);
         }
 
     }
 
     private class GeocoderTask extends AsyncTask<String, Void, Address> {
 
-        private String itemID;
-        private String title;
-        private String description;
+        private final String title;
+        private final String description;
 
-        public GeocoderTask(String title, String description, String itemID) {
-            this.itemID = itemID;
+        public GeocoderTask(String title, String description) {
             this.title = title;
             this.description = description;
         }
@@ -183,7 +179,9 @@ public class AddItemActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            return addresses.size() == 0
+            return addresses == null
+                ? null
+                : addresses.size() == 0
                     ? null
                     : addresses.get(0);
         }
@@ -197,6 +195,7 @@ public class AddItemActivity extends AppCompatActivity {
             } else {
                 Item.Category itemCategory = (Item.Category) spinnerCategory.getSelectedItem();
                 Item.Status itemStatus = (Item.Status) spinnerItemType.getSelectedItem();
+                FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 //                Item item = new Item(title, description, itemCategory, itemStatus, FirebaseAuth.getInstance().getCurrentUser().getUid(), 0, new LatLng(0, 0));
 
                 Item item = new ItemBuilder()
@@ -204,7 +203,7 @@ public class AddItemActivity extends AppCompatActivity {
                         .setDescription(description)
                         .setCategory(itemCategory)
                         .setStatus(itemStatus)
-                        .setUser(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                        .setUser(firebaseUser == null ? null : firebaseUser.getUid())
                         .setLatLng(new LatLng(address.getLatitude(), address.getLongitude()))
                         .build();
 
@@ -229,31 +228,24 @@ public class AddItemActivity extends AppCompatActivity {
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
         // for very easy animations. If available, use these APIs to fade-in
         // the progress spinner.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+        int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
-            mAddItemView.setVisibility(show ? View.GONE : View.VISIBLE);
-            mAddItemView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mAddItemView.setVisibility(show ? View.GONE : View.VISIBLE);
-                }
-            });
+        mAddItemView.setVisibility(show ? View.GONE : View.VISIBLE);
+        mAddItemView.animate().setDuration(shortAnimTime).alpha(
+                show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mAddItemView.setVisibility(show ? View.GONE : View.VISIBLE);
+            }
+        });
 
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mProgressView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-                }
-            });
-        } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mAddItemView.setVisibility(show ? View.GONE : View.VISIBLE);
-        }
+        mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+        mProgressView.animate().setDuration(shortAnimTime).alpha(
+                show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            }
+        });
     }
 }
