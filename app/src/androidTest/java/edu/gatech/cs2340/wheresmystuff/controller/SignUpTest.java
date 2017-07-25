@@ -44,9 +44,9 @@ public class SignUpTest {
     public void setUp() {
         signUpActivity = SignUpActivity.getInstance();
         email = onView(withId(R.id.email));
-        password = onView(withId(R.id.password));
-        passwordTwo = onView(withId(R.id.passwordTwo));
-        button = onView(withId(R.id.email_sign_up_button));
+        password = onView(withId(R.id.password_one));
+        passwordTwo = onView(withId(R.id.password_two));
+        button = onView(withId(R.id.email_sign_in_button));
 
 
     }
