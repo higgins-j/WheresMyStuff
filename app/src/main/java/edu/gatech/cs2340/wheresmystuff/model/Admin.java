@@ -1,14 +1,11 @@
 package edu.gatech.cs2340.wheresmystuff.model;
 
 /**
+ * This class represents an Admin
  * @author Monira Khan
  * @version 1.0
  */
-
- /**
-  * This class represents an Admin
-  */
- public class Admin extends User {
+class Admin extends User {
     public Admin(String user, String pass, String name, String phoneNum,
         String address, AccountState accountState) {
         super(user, pass, name, phoneNum, address, accountState);
@@ -19,27 +16,11 @@ package edu.gatech.cs2340.wheresmystuff.model;
     }
 
     /**
-     * Removes inappropriate posts
-     * @return [description]
-     */
-    public boolean removePost() {
-        return false;
-    }
-
-    /**
      * Bans user
      * @param  bannedUser the user being banned
      */
     public void banUser(User bannedUser) {
         bannedUser.setAccountState(AccountState.BANNED);
-    }
-
-    /**
-     * Promotes a user into an Admin
-     * @param toBeAdmin the user to promote
-     */
-    public void userToAdmin(User toBeAdmin) {
-
     }
 
     /**
