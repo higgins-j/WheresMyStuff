@@ -126,7 +126,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 .title(i.getTitle())
                                 .snippet(i.getDescription()));
             }
+
+            if (filteredItemList.size() > 0) {
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(filteredItemList.get(filteredItemList.size() - 1).getLatLngVal()));
+            }
         }
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(filteredItemList.get(filteredItemList.size() - 1).getLatLngVal()));
     }
 }
