@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">WheresMyStuff</string>
+    <string name="action_settings">Configuración</string>
+
+    <string name="title_activity_login">Iniciar sesión</string>
+    <string name="title_activity_sign_up">Registrar</string>
+    <string name="title_activity_app">¿Donde están mis cosas?</string>
+    <string name="title_activity_add_item">Cosa nueva</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Correo electrónico</string>
+    <string name="prompt_password">Contraseña</string>
+    <string name="action_sign_in">Iniciar sesión</string>
+    <string name="action_sign_in_short">Iniciar</string>
+    <string name="error_invalid_email">Esta dirección no es valida</string>
+    <string name="error_invalid_password">Esta contraseña es demasiado corta</string>
+    <string name="error_incorrect_password">Esta contraseña no es correcta</string>
+    <string name="error_field_required">Este campo es requerida</string>
+    <string name="error_email_password_match">Esta dirección y contraseña no coinciden</string>
+    <string name="error_email_already_registered">Esta dirección ya está en uso</string>
+    <string name="title_activity_maps">Mapa</string>
+</resources>
