@@ -90,7 +90,7 @@ public class SignUpTest {
         String badUsername = "xxx";
         email.perform(typeText(badUsername));
         password.perform(typeText(goodPassword));
-        password.perform(typeText(goodPassword));
+        passwordTwo.perform(typeText(goodPassword));
         closeSoftKeyboard();
         button.perform(click());
 
